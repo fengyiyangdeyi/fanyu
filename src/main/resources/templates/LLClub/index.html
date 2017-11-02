@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>充值</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css">
+    <link rel="stylesheet" type="text/css" href="css/loading.css">
+    <script src="js/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <style>
+        body{
+            background: url("img/ico_payBgImg.jpg") ;
+            background-size: cover;
+        }
+        .shop_content{
+            text-align: center;
+        }
+        .shop_list{
+            display:inline-block;
+            overflow: hidden;
+            /*text-align: center;*/
+            margin:0 auto;
+        }
+        .shop_list .shop_list_one{
+            height: 225px;
+            width: 158px;
+            float: left;
+            /*padding: 10px;*/
+            background: url("img/ico_payOne_bg.png");
+            margin-top: 10px;
+            margin-left: 5px;
+            margin-right: 5px;
+            background-size: cover;
+            /*text-align: center;*/
+        }
+        .shop_list .shop_list_goods{
+            height: 225px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            position: relative;
+            /*background-color: #164c66;*/
+        }
+        .shop_list_goods_top{
+             /*background-image: url("img/ico_pay_top.png") ;*/
+            position: absolute;
+            top: 10px;
+            text-align: center;
+            color: white;
+            width: 100%;
+         }
+        .shop_list_good_bottom{
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            height: 30px;
+            line-height: 30px;
+            /*background-color: #092c3e;*/
+        }
+        .shop_list_goods_img{
+            width: 100px;
+            height: 90px;
+            margin-top: 70px;
+        }
+        .shop_list_goods_bottom{
+            /*background-image: url("img/ico_pay_purchar.png") ;*/
+            text-align: center;
+            color: white;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="shop_content">
+        <ul class="shop_list">
+
+
+        </ul>
+    </div>
+
+    <div class="spinner">
+        <div class="spinner-container container1">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container2">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container3">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+    </div>
+</body>
+    <script>
+        $(document).ready(function(){
+            // 获取数据
+            var jsonDataArray;
+
+            $.ajax({
+                type: "get",
+                url:"/diamond/getGoods",
+                async:true,
+                success:function (res) {
+                    layoutShopList();
+
+                    var data = res["data"];
+                    jsonDataArray = data;
+                    for (var i =0; i < data.length;i++) {
+                        var dict = data[i];
+                         createGoods(dict,i);
+                    }
+                }
+            })
+            function createGoods(dict,index) {
+                var imageURL = dict["imgUrl"];
+                var price = dict['price'];
+                var diamondNum = dict['diamondNum'];
+                var givingDiamondNum = dict['givingDiamondNum'];
+
+
+                var li =  document.createElement('li');
+                li.setAttribute('dict',index);
+                $(li).click(function () {
+                    userDidClickGoods(this);
+                })
+                $(li).attr("class", "shop_list_one");
+
+                var goods = document.createElement('div');
+                $(goods).attr("class", "shop_list_goods")
+                $(li).append(goods)
+
+                var goods_top = document.createElement('div');
+                $(goods_top).attr("class", "shop_list_goods_top")
+                $(goods_top).text(diamondNum + givingDiamondNum + ' 钻石');
+
+                var img = document.createElement('img');
+                img.src = imageURL;
+                $(img).attr("class", "shop_list_goods_img")
+
+                var priceDiv = document.createElement('div');
+                $(priceDiv).attr("class", "shop_list_good_bottom")
+                $(priceDiv).text(price + ' 元');
+
+                var gouMai = document.createElement('div');
+                $(gouMai).attr("class", "shop_list_goods_bottom")
+                $(gouMai).text('购买')
+
+                $(goods).append(goods_top);
+                $(goods).append(img);
+                $(goods).append(priceDiv);
+//                $(li).append(gouMai);
+                $('.shop_list').append(li);
+            }
+            $(window).resize(function () {
+                layoutShopList();
+            });
+            function layoutShopList() {
+                var screen_width =  $(window).width();
+                var ulWidth = screen_width - screen_width % 170 + 5;
+                $('.shop_list').css('width' , ulWidth);
+            }
+            //用户cookies 处理
+            function userInfo() {
+                var cookies  = document.cookie;
+                console.log(cookies);
+            }
+            function userDidClickGoods(li) {
+                var index = li.attributes['dict'].nodeValue;
+                var json = jsonDataArray[index];
+                // setCookie('jsessionId', getCookie('jsessionId'));
+                // // window.setCookie('jsessionId',getCookie('jsessionId'));
+                // setCookie('money',json['price']);
+                // setCookie('id',json['id'] );
+                // window.location.href= "payWay.html";
+                window.location.href= "payWay.html" + "?id" + "=" + json['id'] + "&money=" + json['price'];
+         }
+            userInfo();
+
+            function setCookie(name,value)
+            {
+                var Days = 30; //此 cookie 将被保存 30 天
+                var exp　= new Date();
+                exp.setTime(exp.getTime() + Days*24*60*60*1000);
+                document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+                location.href = "payWay.html"; //接收页面.
+            }
+
+            function getCookie(name) {
+                var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
+                if(arr != null) return unescape(arr[2]); return null;
+            }
+        });
+
+    </script>
+</html>

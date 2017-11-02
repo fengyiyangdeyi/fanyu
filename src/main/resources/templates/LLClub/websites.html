@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>泛娱科技</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css">
+    <script src="js/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+    <style>
+
+        .content{
+            display: inline-block;
+        }
+        .left_logo{
+            margin: 60px 30px;
+            width: 160px;
+            display: inline-block;
+        }
+        .left_menu{
+            float: left;
+            height: 100%;
+            width: 289px;
+            display: inline-block;
+            background: url("img/ico_web_left.png") no-repeat;
+            background-size: cover;
+        }
+        .left_menu_btn{
+            display: inline-block;
+            width: 100%;
+        }
+        .left_menu_btn img{
+            width: 100%;
+        }
+        .right_menu{
+            float: right;
+            height: 100%;
+            width: 1332px;
+            display: inline-block;
+            background: url("img/ico_web_bg.png") ;
+            background-size: cover;
+        }
+
+        .right_menu_home_top{
+            margin-left: 60px;
+            margin-top: 60px;
+        }
+
+        .data_qr{
+            background: url("img/ico_web_blank_qr.png");
+        }
+    </style>
+
+</head>
+<body>
+        <div class="content">
+            <div class="left_menu">
+                <img class="left_logo" src="img/ico_left_logo.png">
+                <div id="left_menu_btn1" class="left_menu_btn">
+                    <img src="img/ico_web_home.png">
+                </div>
+                <div id="left_menu_btn2" class="left_menu_btn">
+                    <img src="img/ico_web_downBtn.png">
+                </div>
+                <div id="left_menu_btn3" class="left_menu_btn">
+                    <img src="img/ico_web_data.png">
+                </div>
+                <a class="left_menu_btn" href="agent.html">
+                    <img src="img/ico_web_agent.png">
+                </a>
+            </div>
+
+            <div class="right_menu">
+                    <div class="right_menu_home_top"><img src="img/ico_web_home_top.png"></div>
+                    <div class="right_menu_home ">
+
+                        <div style="margin-left: 50px;margin-top: 40px;width: 160px"><img src="img/ico_web_homePage.png"></div>
+                        <div style="margin-left: 100px;font-size: 18px;color: #3f98cd;margin-top: 40px">欢迎您进入泛娱群聊官网</div>
+
+                        <div style="margin-top: 40px;margin-left: 100px">
+                            <div style="font-size: 18px;color: #3f98cd;">
+                                <span style="margin: 0 15px ; vertical-align: middle">新闻</span>
+                                <div style="background-color:#3f98cd;height:  15px;width: 1px;display: inline-block;vertical-align: middle"></div>
+                                <span style="margin: 0 15px ; vertical-align: middle">公告</span>
+                            </div>
+                            <div style="margin-top: 15px">
+                                <ul>
+                                    <li>泛娱群聊APP正式上线。</li>
+                                    <li>泛娱群聊APP正式上线。</li>
+                                    <li>泛娱群聊APP正式上线。</li>
+                                    <li>泛娱群聊APP正式上线。</li>
+                                    <li>泛娱群聊APP正式上线。</li>
+                                    <li>泛娱群聊APP正式上线。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div  class="right_menu_down hiddenBox">
+                        <div style="margin-left: 50px;margin-top: 40px;width: 160px"><img src="img/ico_web_downTop.png"></div>
+                        <div style="margin-left: 200px;margin-top: 40px;width: 160px"><img src="img/ico_web_qr.png"></div>
+                        <img style="margin-left: 100px" src="img/ico_web_downApple.png">
+                        <img src="img/ico_web_android.png">
+                    </div>
+
+                    <div class="right_menu_data hiddenBox">
+                        <div style="margin-left: 50px;margin-top: 40px;width: 160px"><img src="img/ico_web_dataImg.png"></div>
+                        <div class="data_qr" style="margin-left: 100px;margin-top: 50px ;display: inline-block;width: 189px;height: 254px; ">
+                            <img style="margin-top: 34px;margin-left: 24px; width: 140px;height: 140px" src="img/data_test_ico.png">
+                        </div>
+                        <div style="width: 300px;display: inline-block;font-size: 18px;vertical-align: top;margin-top: 100px; margin-left: 30px" >数据统计中心是泛娱科技产业有限公司为泛娱群聊独家定制的一款强大的后台统计机器人，拥有强大的数据统计计算功能</div>
+                    </div>
+            </div>
+        </div>
+</body>
+    <script>
+
+        $(document).ready(function () {
+            layout();
+            $(window).resize(function () {
+                layout();
+            })
+
+            $('#left_menu_btn1').click(function () {
+                $('.right_menu_down').addClass('hiddenBox')
+                $('.right_menu_data').addClass('hiddenBox')
+                $('.right_menu_home').removeClass('hiddenBox');
+        })
+
+            $('#left_menu_btn2').click(function () {
+                $('.right_menu_down').removeClass('hiddenBox')
+                $('.right_menu_data').addClass('hiddenBox')
+                $('.right_menu_home').addClass('hiddenBox');
+            })
+
+            $('#left_menu_btn3').click(function () {
+                $('.right_menu_down').addClass('hiddenBox')
+                $('.right_menu_data').removeClass('hiddenBox')
+                $('.right_menu_home').addClass('hiddenBox');
+            })
+        })
+        function layout() {
+            console.log(111);
+            var screen_width =  $(window).width();
+            var scrren_height = $(window).height();
+            if (scrren_height < 750){
+                scrren_height = 750;
+                $('.content').css('height',750);
+            }else {
+                $('.content').css('height',scrren_height);
+            }
+
+            if (screen_width < 1621){
+                $('.content').css('width',1621);
+                $('.right_menu').css('width',1332);
+            }else {
+                $('.content').css('width',screen_width);
+                $('.right_menu').css('width',screen_width-289);
+            }
+        }
+
+        $.get("/user/getLoginUser"
+            , function (data) {
+                if (data.retCode == 200) {
+                    //
+                } else {
+                    //
+                }
+            }
+        );
+
+    </script>
+</html>

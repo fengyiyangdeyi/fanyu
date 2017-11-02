@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>泛娱代理充值</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css">
+    <script src="js/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+    <style>
+
+        .agent-header{
+            display: inline-block;
+        }
+
+        .agent-header-top{
+            /*display: inline-block;*/
+            /*margin:0 270px;*/
+            margin-left: 270px;
+            width: 1300px;
+            height: 90px;
+            text-align: center;
+        }
+
+        .agent-logo{
+            margin-top: 5px;
+            width: 220px;
+            height: 70px;
+            float: left;
+        }
+
+        .header-menu {
+            display: inline-block;
+            margin: 0 auto;
+            height: 100%;
+            line-height: 100%;
+        }
+
+        .header-menu li{
+            display: inline-block;
+            float: left;
+            margin: 0 15px;
+            height: 100%;
+            font-size: 17px;
+            line-height: 80px;
+        }
+
+        .header-user{
+            float: right;
+            vertical-align: middle;
+        }
+
+        .header-user img{
+            width: 60px;
+            height: 60px;
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        .agent-banner{
+            width: 100%;
+        }
+        .agent-banner img{
+            width: 100%;
+        }
+
+        .agent-user {
+            margin-left: 270px;
+            vertical-align: middle;
+            height: 75px;
+            line-height: 75px;
+            display: inline-block;
+        }
+
+        .agent-user img{
+            width: 45px;
+            height: 45px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .agent-user span{
+            vertical-align: middle;
+        }
+
+        .agent-user-name{
+            color: blue;
+        }
+
+        .agent-content{
+            overflow: hidden;
+            /*margin: 0 270px 0 270px;*/
+            margin-left: 270px;
+            width: 1300px;
+            padding: 0 18px;
+            background: url("img/ico_content_bg.png") no-repeat ;
+            background-size: contain;
+        }
+
+        .agent-content-banner{
+            margin-top: 15px;
+            width: 100%;
+        }
+        .agent-content ul li{
+            float: left;
+            margin: 10px 20px;
+            position: relative;
+        }
+
+        .agent-content-odds{
+            position: absolute;
+            right: 10px;
+            top: 20px;
+        }
+
+        .agent-goods{
+            display: inline-block;
+            margin-left: 15px;
+        }
+
+        .agent-goods li {
+            height: 281px;
+        }
+
+        .agent-payment-type{
+            color: #1296db;
+            margin-left: 30px;
+            font-size: 18px;
+        }
+
+        .agent-line{
+            /*display: inline-block;*/
+            height: 1px;
+            margin: 10px 70px 0 15px;
+            background-color: #e5e5e5;
+        }
+
+        .agent-slider-line{
+            width: 130px;
+            height: 1px;
+            margin-left: 5px;
+            background-color: #1296db;
+        }
+        .agent-wechat{
+            margin-top: 20px;
+            margin-left: 30px;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .agent-pay{
+            display:block;
+            height: 112px;
+            background-color:#f1f1f1;
+            line-height: 112px;
+            margin: 0 60px 100px 30px;
+            text-align: center;
+        }
+        .agent-pay-amount{
+            float: left;
+            display: inline-block;
+            height: 112px;
+            line-height: 112px;
+            font-size: 30px;
+            margin-left: 5px;
+            color: #888888;
+            vertical-align: middle;
+        }
+        .agent-pay-btn{
+            margin: 0 auto;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .agent-pay-amount-text{
+            color: #1296db;
+        }
+
+        .agent-bottom{
+            /*display: inline-block;*/
+            background-color: #1d242f;
+            color: #555555;
+            width: 100%;
+            min-width: 1600px;
+            font-size: 16px;
+        }
+
+        .agent-bottom-left{
+            margin-left: 270px;
+            display: inline-block;
+            margin-top: 35px;
+        }
+
+        .agent-bottom-right{
+            float: right;
+            display: inline-block;
+            margin-top: 20px;
+            margin-right: 270px;
+        }
+
+    </style>
+</head>
+<body>
+            <div class="agent-header">
+                <div class="agent-header-top">
+                    <img class="agent-logo" src="img/ico_top_logo.png">
+                    <ul class="header-menu">
+                        <li>首页</li>
+                        <li>限时活动</li>
+                        <li>奖品兑换</li>
+                    </ul>
+
+                    <div class="header-user">
+                        <img src="img/ico_header.png">
+                    </div>
+                </div>
+
+                <div class="agent-banner">
+                    <img class="agent-header-banner" src="img/banner.png">
+                </div>
+
+                <div class="agent-user">
+                    <img src="img/ico_header.png">
+                    <span>Hi，</span>
+                    <span class="agent-user-name">博弈天下</span>
+                    <span>，请选择泛娱乐代理VIP服务</span>
+                </div>
+            </div>
+            <div class="agent-content">
+                <img class="agent-content-banner" src="img/ico_content_banner.png">
+                <ul class="agent-goods clearfix">
+                    <li>
+                        <img src="img/350.png">
+                        <img class="agent-content-odds" src="img/限时特惠.png">
+                    </li>
+
+                    <li>
+                        <img src="img/1300.png">
+                        <img class="agent-content-odds" src="img/限时特惠.png">
+                    </li>
+
+                    <li>
+                        <img src="img/3000.png">
+                        <img class="agent-content-odds" src="img/限时特惠.png">
+                    </li>
+
+                    <li>
+                        <img src="img/11000.png">
+                        <img class="agent-content-odds" src="img/限时特惠.png">
+                    </li>
+
+                    <li>
+                        <img src="img/20000.png">
+                        <img class="agent-content-odds" src="img/限时特惠.png">
+                    </li>
+
+                    <li>
+                        <img src="img/50000.png">
+                        <img class="agent-content-odds" src="img/限时特惠.png">
+                    </li>
+                </ul>
+                <div class="agent-payment-type">请选择充值方式</div>
+                <div class="agent-line">
+                    <div class="agent-slider-line"></div>
+                </div>
+                <div class="agent-wechat">
+                    <img class="pay_weixin" src="img/ico_wechat_selected.png">
+                    <img class="pay_ali" style="margin-left: 30px;" src="img/ico_zhifubao.png">
+                </div>
+                <div class="agent-pay ">
+                    <div class="agent-pay-amount">应付：<span class="agent-pay-amount-text">0</span> 元 </div>
+                    <img class="agent-pay-btn" src="img/ico_pay_btn.png">
+
+                </div>
+            </div>
+            <div class="agent-bottom">
+                <div class="agent-bottom-left">
+                    <span style="display: block;margin:  5px 0;">友情链接：www.fanyu.com.cn</span>
+                    <div style="display: inline-block ; margin: 5px 0;">
+                        <span>网站导航：</span>
+                        <span>如何充值</span>
+                        <span>奖品兑换</span>
+                        <span>在线充值</span>
+                        <span>关于我们</span>
+                        <span>联系方式</span>
+                    </div>
+                    <div style="margin: 30px 0;">
+                        <img style="vertical-align: middle" src="img/ico_bottom_logo.png">
+                        <span style="vertical-align: middle" >fanyu© 2017-2018 深圳市泛娱科技有限公司 </span>
+                    </div>
+                </div>
+
+                <div class="agent-bottom-right">
+                    <div style="display: block;margin:  5px 0;">联系我们</div>
+                    <div style="display: block;margin:  5px 0;">电话咨询：xxxxxxxxxxx</div>
+                    <div style="display: block;margin:  5px 0;">QQ咨询： xxxxxxxxx</div>
+                    <div style="display: block;margin:  35px 0;">若发现您的权利被侵害，请联系客服，我们将尽快帮您处理</div>
+                </div>
+            </div>
+
+        <script>
+                $(document).ready(function () {
+                    var moneyList = ['350','1300','3000','11000','20000','50000'];
+                    var goodChildren =  $('.agent-goods').children();
+                    for(var i =0 ; i < goodChildren.length;i++){
+                        $(goodChildren[i]).attr('index',i);
+                        $(goodChildren[i]).click(function () {
+                            var index =  $(this).attr('index');
+                            $('.agent-pay-amount-text').text(moneyList[index]);
+//                           console.log($(this).attr('index'));
+                        });
+                    }
+                    $('.agent-pay-btn').click(function () {
+                        // 点击了购买
+                        alert('点击了购买');
+                    });
+
+                    $('.pay_weixin').click(function () {
+                        $('.pay_weixin').attr("src", "img/ico_wechat_selected.png");
+                        $('.pay_ali').attr("src", "img/ico_zhifubao.png");
+
+                    })
+
+
+                    $('.pay_ali').click(function () {
+                        $('.pay_weixin').attr("src", "img/ico_wechat.png");
+                        $('.pay_ali').attr("src", "img/ico_zhifubao_selected.png");
+                    })
+                });
+        </script>
+</body>
+</html>

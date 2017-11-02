@@ -1,0 +1,58 @@
+{
+  "retCode":200,
+  "retMsg":"成功",
+  "data":[
+    {"imgUrl":"http://120.78.76.4:8085/goods/ico_pay1@3x.png",
+      "diamondNum":60.00,
+      "givingDiamondNum":0.00,
+      "price":6.00,
+      "id":1,
+      "appleid":"fanyu_diamond_6"},
+
+    {"imgUrl":"http://120.78.76.4:8085/goods/ico_pay2@3x.png",
+      "diamondNum":120.00,
+      "givingDiamondNum":10.00,
+      "price":12.00,
+      "id":2,
+      "appleid":"fanyu_diamond_10"},
+
+    {"imgUrl":"http://120.78.76.4:8085/goods/ico_pay3@3x.png",
+      "diamondNum":250.00,
+      "givingDiamondNum":30.00,
+      "price":25.00,
+      "id":3,"appleid":"fanyu_diamond_20"},
+
+    {"imgUrl":"http://120.78.76.4:8085/goods/ico_pay4@3x.png",
+      "diamondNum":500.00,
+      "givingDiamondNum":65.00,
+      "price":50.00,"id":4,
+      "appleid":"fanyu_diamond_50"},
+
+    {"imgUrl":"http://120.78.76.4:8085/goods/ico_pay5@3x.png",
+      "diamondNum":1080.00,
+      "givingDiamondNum":140.00,
+      "price":108.00,"id":5,
+      "appleid":"fanyu_diamond_100"},
+
+    {"imgUrl":"http://120.78.76.4:8085/goods/ico_pay6@3x.png",
+      "diamondNum":2180.00,
+      "givingDiamondNum":350.00,
+      "price":218.00,
+      "id":6,
+      "appleid":"fanyu_diamond_218"},
+
+    {"imgUrl":"http://120.78.76.4:8085/goods/ico_pay7@3x.png",
+      "diamondNum":3280.00,
+      "givingDiamondNum":580.00,
+      "price":328.00,
+      "id":7,
+      "appleid":"fanyu_diamond_328"},
+
+    {"imgUrl":"http://120.78.76.4:8085/goods/ico_pay8@3x.png",
+      "diamondNum":6480.00,
+      "givingDiamondNum":1100.00,
+      "price":648.00,
+      "id":8,
+      "appleid":"fanyu_diamond_648"}
+  ]
+}

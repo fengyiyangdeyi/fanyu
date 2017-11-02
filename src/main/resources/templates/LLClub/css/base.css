@@ -1,0 +1,24 @@
+body,h1,h2,li,ul{
+    padding: 0;
+    margin: 0;
+    /*list-style: none;*/
+    text-decoration: none;
+    list-style-type:none;
+}
+
+.clearfix:after{
+         content:'';
+         visibility:hidden;
+         font-size:0;
+         height:0;
+         display:block;
+         clear:both;
+}
+
+.hiddenBox{
+    display: none;
+}
+
+.showBox{
+    display: block;
+}

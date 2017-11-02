@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>泛娱应用中心</title>
+    <link rel="stylesheet" type="text/css" href="css/base.css">
+    <script src="js/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <script>
+    </script>
+
+    <style>
+        @media only screen and (min-width: 768px){
+            .fanyu_header{
+                position: relative;
+                color: white;
+                height: 350px;
+                font-family: "Open Sans","Helvetica Neue",Helvetica,"Microsoft YaHei",sans-serif;
+                text-align: center;
+                /*background-color: #1296db;*/
+                background: url("img/ico_main_bg.png");
+                background-size: cover;
+            }
+
+            .fanyu_header_logo{
+                margin:  110px 0 auto;
+            }
+            .fanyu_content_app{
+                margin: 25px 25px 0 25px;
+                position: relative;
+                min-width: 300px;
+
+            }
+
+
+        }
+
+        @media only screen and (max-width: 768px){
+            .fanyu_header{
+                position: relative;
+                color: white;
+                height: 140px;
+                font-family: "Open Sans","Helvetica Neue",Helvetica,"Microsoft YaHei",sans-serif;
+                text-align: center;
+
+                /*background-color: #1296db;*/
+                background: url("img/ico_main_bg.png");
+            }
+            .fanyu_header_logo{
+                width: 144px;
+                height: 61px;
+                margin:  40px 0 auto;
+            }
+
+            .fanyu_content_app{
+                position: relative;
+                margin: 10px 10px 0 10px;
+            }
+
+        }
+        .fanyu_header_app{
+            position: absolute;
+            left: 95px;
+            display: inline-block;
+        }
+
+        .fanyu_content_apple{
+            color: cornflowerblue;
+            font-size: 16px;
+            vertical-align:  middle;
+
+        }
+
+        .fanyu_content_apple img{
+            vertical-align: middle;
+        }
+        .fanyu_content_apple a{
+            vertical-align: middle;
+        }
+
+        .fanyu_content_star{
+            padding: 5px 0 0;
+        }
+
+        .fanyu_content_star img{
+            height: 20px;
+        }
+
+        .fanyu_content_desc{
+            color: #3a3b3c;
+            font-size: 12px;
+        }
+
+        .fanyu_content_downBtn{
+            position: absolute;
+            right: 10px;
+            width: 40px;
+            top: 5px;
+            display: inline-block;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .fanyu_content_downBtn img{
+            width: 40px;
+            text-align: center;
+        }
+
+
+    </style>
+</head>
+<body>
+        <div class="fanyu_header">
+            <img class="fanyu_header_logo" src="img/ico_main_logo.png">
+        </div>
+        <div class="fanyu_content">
+                <ul>
+                    <li class="fanyu_content_app">
+                        <img style="width: 78px;height: 78px;" src="img/ico_main_avatar.png">
+                        <div class="fanyu_header_app">
+                            <div class="fanyu_content_apple">
+                                <img src="img/ico_main_tip.png">
+                                <a>全民聊聊 [苹果版]</a>
+                            </div>
+                            <div class="fanyu_content_star">
+                                <img src="img/ico_main_star.png">
+                            </div>
+                            <span class="fanyu_content_desc">全民聊聊客服微信：szfanyukeji</span>
+                        </div>
+
+                        <a class="fanyu_content_downBtn"  id="apple_btn" href="">
+                            <img src="img/ico_down.png">
+                            <span>下载</span>
+                        </a>
+                    </li>
+
+                    <li class="fanyu_content_app">
+                        <img style="width: 78px;height: 78px;" src="img/ico_main_avatar.png">
+                        <div class="fanyu_header_app">
+                            <div class="fanyu_content_apple">
+                                <img src="img/ico_main_tip.png">
+                                <a>全民聊聊 [安卓版]</a>
+                            </div>
+                            <div class="fanyu_content_star">
+                                <img src="img/ico_main_star.png">
+                            </div>
+                            <span class="fanyu_content_desc">全民聊聊客服微信：szfanyukeji</span>
+                        </div>
+
+                        <a class="fanyu_content_downBtn" id="android_btn">
+                            <img src="img/ico_down.png">
+                            <span>下载</span>
+                        </a>
+                    </li>
+                </ul>
+        </div>
+
+    <script>
+        $(document).ready(function () {
+            function getUrlParam(name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+                var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+                if (r != null) return unescape(r[2]); return null; //返回参数值
+            }
+
+            function openApp() {
+                if (! isWeiXin()){
+                    var roomid = getUrlParam("room");
+                    var url = "fanyu://im/chat";
+                    if (roomid && roomid.length > 0){
+                        url = url +"?room=" + roomid;
+                        window.location.href = url;
+                    }
+                }else {
+//                    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+//                    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+//                    if (isAndroid){
+//
+//                    }
+//
+//                    if (isiOS){
+//
+//                    }
+
+                    alert("请在浏览器打开");
+                }
+
+            }
+
+            function isWeiXin() {
+                var u = navigator.userAgent;
+                var ua = window.navigator.userAgent.toLowerCase();
+                if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            openApp();
+            $('#apple_btn').click(function () {
+               alert('上线中，敬请期待');
+            });
+
+            $('#android_btn').click(function () {
+                alert('上线中，敬请期待');
+            });
+        });
+    </script>
+</body>
+</html>
