@@ -1,12 +1,14 @@
 package cn.com.fanyu.service;
 
 import cn.com.fanyu.dao.*;
-import cn.com.fanyu.domain.FyGlobalValue;
-import cn.com.fanyu.domain.FyGroup;
-import cn.com.fanyu.domain.FyScore;
-import cn.com.fanyu.domain.FyUser;
+import cn.com.fanyu.domain.*;
+import cn.com.fanyu.huanxin.api.impl.EasemobIMUsers;
 import cn.com.fanyu.utils.BusinessException;
+import cn.com.fanyu.utils.IdGen;
+import cn.com.fanyu.utils.MD5Tools;
 import cn.com.fanyu.utils.StringUtil;
+import io.swagger.client.model.RegisterUsers;
+import io.swagger.client.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,9 @@ public class UserService {
     private boolean addDiamond;
     @Autowired
     private FyGlobalValueRepository fyGlobalValueRepository;
+    private EasemobIMUsers eiu = new EasemobIMUsers();
+    @Autowired
+    private FyVersionStatusRepository fyVersionStatusRepository;
 
     public void updateUser(String username, String imgUrl, String nickname) throws Exception {
         FyUser user = fyUserRepository.getIMUserByUserName(username);
@@ -143,6 +148,71 @@ public class UserService {
         Map map =new HashMap();
         map.put("type",type);
         map.put("version",value.getGlobalValue());
+        return map;
+    }
+
+    public Map register(String phone, String pwd) {
+        Map map = new HashMap<>();
+        FyUser user=new FyUser();
+        user.setUsername(phone);
+        user.setPhone(phone);
+        FyUser dbuser = fyUserRepository.getIMUserByUserName(user.getUsername());
+        if (dbuser == null) {
+            user.setPassword(MD5Tools.MD5(pwd));
+            dbuser=fyUserRepository.saveAndFlush(user);
+            RegisterUsers list = new RegisterUsers();
+            User u=new User();
+            u.setUsername(user.getUsername());
+            u.setPassword(pwd);
+            list.add(u);
+            eiu.createNewIMUserSingle(list);
+        }
+        FyUser byUuid;
+        String uuid;
+        do {
+            uuid = IdGen.uuid();
+            byUuid = fyUserRepository.findByUuid(uuid);
+        }while (byUuid!=null);
+        dbuser.setUuid(uuid);
+        fyUserRepository.saveAndFlush(dbuser);
+
+
+        map.put("id",dbuser.getId());
+        map.put("username",dbuser.getUsername());
+        map.put("imgUrl",dbuser.getImgUrl());
+        map.put("nickname",dbuser.getNickname());
+        map.put("diamondNum",dbuser.getDiamondNum());
+        map.put("uuid",dbuser.getUuid());
+
+        //支付
+        FyGlobalValue payStatus = fyGlobalValueRepository.findByStatusAndGlobalKey(1, "payStatus");
+        map.put("payStatus",payStatus.getGlobalValue());
+        //转盘
+        FyGlobalValue rotaryTable = fyGlobalValueRepository.findByStatusAndGlobalKey(1, "rotaryTable");
+        if(rotaryTable!=null){
+            map.put("rotaryTable",rotaryTable.getGlobalValue());
+        }else {
+            map.put("rotaryTable","");
+        }
+
+        List<FyGroup> fyGroups = fyGroupRepository.ownerChatGroup(user.getUsername());
+        if(fyGroups.size()>0){
+            map.put("hasCreateGroup",1);
+        }else {
+            map.put("hasCreateGroup",0);
+        }
+
+        return map;
+    }
+
+    public Map getVersionStatus(FyVersionStatus fyVersionStatus) {
+        FyVersionStatus status=fyVersionStatusRepository.findByVersionValueAndType(fyVersionStatus.getVersionValue(),fyVersionStatus.getType());
+        Map map =new HashMap();
+        if(status!=null){
+            map.put("status",1);
+        }else {
+            map.put("status",0);
+        }
         return map;
     }
 }

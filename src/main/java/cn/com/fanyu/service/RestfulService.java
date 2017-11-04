@@ -215,6 +215,7 @@ public class RestfulService {
         if (dbuser == null) {
             String password = user.getPassword();
             user.setPassword(MD5Tools.MD5(password));
+            user.setWxid(user.getUsername());
             dbuser=fyUserRepository.saveAndFlush(user);
             RegisterUsers list = new RegisterUsers();
             User u=new User();

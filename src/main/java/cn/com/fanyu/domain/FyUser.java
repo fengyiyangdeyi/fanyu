@@ -20,6 +20,10 @@ public class FyUser {
     @Column
     private String username;
     @Column
+    private String wxid;
+    @Column
+    private String phone;
+    @Column
     private String nickname;
     @Column
     private String password;
@@ -31,6 +35,22 @@ public class FyUser {
     private String permissions="1";
     @Column
     private String uuid;
+
+    public String getWxid() {
+        return wxid;
+    }
+
+    public void setWxid(String wxid) {
+        this.wxid = wxid;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getUuid() {
         return uuid;

@@ -4,6 +4,7 @@ import cn.com.fanyu.domain.*;
 import cn.com.fanyu.service.RobotService;
 import cn.com.fanyu.service.UserService;
 import cn.com.fanyu.servlet.UserVo;
+import cn.com.fanyu.utils.BusinessException;
 import cn.com.fanyu.utils.ResultCode;
 import cn.com.fanyu.utils.ResultJson;
 import com.alibaba.fastjson.JSON;
@@ -175,6 +176,32 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/getVersionStatus", method = RequestMethod.GET,produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public String getVersionStatus(FyVersionStatus fyVersionStatus) {
+        try {
+            Map version = userService.getVersionStatus(fyVersionStatus);
+            return new ResultJson(ResultCode.SUCCESS_CODE, "成功", "", JSON.toJSONString(version)).toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultJson(ResultCode.FAILE_CODE, "", e.getMessage(), "").toString();
+        }
+    }
 
+    @RequestMapping(value = "/register", method = RequestMethod.POST,produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public String register(String phone,String pwd,HttpSession session,String code) {
+        try {
+            String vcode = (String) session.getAttribute(phone);
+            if(!code.equals(vcode)){
+                throw new BusinessException("验证码不误！");
+            }
+            Map map=userService.register(phone,pwd);
+            return new ResultJson(ResultCode.SUCCESS_CODE, "成功", "", JSON.toJSONString(map)).toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultJson(ResultCode.FAILE_CODE, "", e.getMessage(), "").toString();
+        }
+    }
 
 }

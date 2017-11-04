@@ -124,6 +124,16 @@
             <artifactId>alipay-sdk-java-source</artifactId>
             <version>20170324180803</version>
         </dependency>
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>java_sdk_core</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>java_sdk_dysmsapi</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
 
     </dependencies>
