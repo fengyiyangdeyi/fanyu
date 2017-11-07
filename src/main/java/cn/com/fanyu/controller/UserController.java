@@ -204,4 +204,32 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/forgetpwd", method = RequestMethod.POST,produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public String forgetpwd(String phone,String code,String pwd,HttpSession session) {
+        try {
+            String vcode = (String) session.getAttribute(phone);
+            if(!code.equals(vcode)){
+                throw new BusinessException("验证码不误！");
+            }
+            userService.forgetpwd(phone,pwd);
+            return new ResultJson(ResultCode.SUCCESS_CODE, "成功", "", "").toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultJson(ResultCode.FAILE_CODE, "", e.getMessage(), "").toString();
+        }
+    }
+
+    @RequestMapping(value = "/phoneLogin", method = RequestMethod.POST,produces = "application/json; charset=utf-8")
+    @ResponseBody
+    public String phoneLogin(String phone,String pwd) {
+        try {
+            userService.phoneLogin(phone,pwd);
+            return new ResultJson(ResultCode.SUCCESS_CODE, "成功", "", "").toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultJson(ResultCode.FAILE_CODE, "", e.getMessage(), "").toString();
+        }
+    }
+
 }

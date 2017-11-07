@@ -163,9 +163,11 @@ public class UserService {
             RegisterUsers list = new RegisterUsers();
             User u=new User();
             u.setUsername(user.getUsername());
-            u.setPassword(pwd);
+            u.setPassword("fanyu");
             list.add(u);
             eiu.createNewIMUserSingle(list);
+        }else {
+            throw new BusinessException("用户已注册！");
         }
         FyUser byUuid;
         String uuid;
@@ -214,5 +216,25 @@ public class UserService {
             map.put("status",0);
         }
         return map;
+    }
+
+    public void forgetpwd(String phone, String newpwd) {
+        FyUser user = fyUserRepository.getIMUserByUserName(phone);
+        if(user==null){
+            throw new BusinessException("用户不存在！");
+        }
+        user.setPassword(MD5Tools.MD5(newpwd));
+        fyUserRepository.saveAndFlush(user);
+    }
+
+    public void phoneLogin(String phone, String pwd) {
+        FyUser user = fyUserRepository.getIMUserByUserName(phone);
+        if(user==null){
+            throw new BusinessException("用户未注册");
+        }
+        String md5 = MD5Tools.MD5(pwd);
+        if(!user.getPassword().equals(md5)){
+            throw new BusinessException("密码有误！");
+        }
     }
 }

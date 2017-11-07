@@ -31,7 +31,7 @@ public class MessageController {
             SendSmsResponse response = SmsDemo.sendSms(phone,x);
             System.out.println("短信接口----------------"+x);
             if("OK".equals(response.getCode())){
-                session.setAttribute(phone,x);
+                session.setAttribute(phone,x+"");
                 session.setMaxInactiveInterval(60*5);//五分钟
                 return new ResultJson(ResultCode.SUCCESS_CODE, "成功", "", "").toString();
             }else {

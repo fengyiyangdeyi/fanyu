@@ -47,6 +47,11 @@ public class TestController {
     public String home() {
         return "index";
     }
+
+    @RequestMapping("/test2")
+    public String test2() {
+        return "templates/html2";
+    }
 //
 //    @RequestMapping("/abb")
 //    public String abb() {
@@ -171,6 +176,9 @@ public class TestController {
         System.out.println();
         System.out.println(cow);
     }
+
+
+
 
 
 
