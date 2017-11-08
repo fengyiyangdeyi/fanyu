@@ -2,17 +2,27 @@ package cn.com.fanyu.controller;
 
 import cn.com.fanyu.service.PayService;
 import cn.com.fanyu.utils.AlipayConfig;
+import cn.com.fanyu.utils.ResultCode;
+import cn.com.fanyu.utils.ResultJson;
+import cn.com.fanyu.utils.WXConfig;
+import com.alibaba.fastjson.JSON;
 import com.alipay.api.internal.util.AlipaySignature;
+import com.github.wxpay.sdk.WXPay;
+import com.github.wxpay.sdk.WXPayConfig;
+import com.github.wxpay.sdk.WXPayUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -28,7 +38,7 @@ public class PayController {
     @RequestMapping(value = "/alipay", method = RequestMethod.GET)
     @ResponseBody
     public void alipay(HttpServletResponse response, Long goodid,
-                       @CookieValue(value = "jsessionId",defaultValue = "nocookie") String jsessionId,
+                       @CookieValue(value = "jsessionId", defaultValue = "nocookie") String jsessionId,
                        HttpServletRequest request) throws IOException {
         try {
             Cookie[] cookies = request.getCookies();
@@ -37,7 +47,7 @@ public class PayController {
             response.getWriter().write(respon);//直接将完整的表单html输出到页面
             response.getWriter().flush();
             response.getWriter().close();
-        }catch (Exception e){
+        } catch (Exception e) {
             response.setContentType("text/html;charset=" + AlipayConfig.CHARSET);
             response.getWriter().write(e.getMessage());//直接将完整的表单html输出到页面
             response.getWriter().flush();
@@ -108,7 +118,7 @@ public class PayController {
                 //如果签约的是可退款协议，那么付款完成后，支付宝系统发送该交易状态通知。
             }
 
-            payService.updateOrderStatus(out_trade_no, trade_no,new BigDecimal(paymoney));
+            payService.updateOrderStatus(out_trade_no, trade_no, new BigDecimal(paymoney),"alipay");
 
             //——请根据您的业务逻辑来编写程序（以上代码仅作参考）——
             PrintWriter out = response.getWriter();
@@ -124,11 +134,85 @@ public class PayController {
         }
     }
 
-    @RequestMapping(value = "/return_url",produces = "application/json; charset=utf-8")
+    @RequestMapping(value = "/return_url", produces = "application/json; charset=utf-8")
     @ResponseBody
     public String return_url() {
         return "支付成功";
     }
 
+    public static void main(String[] args) throws Exception {
 
+        WXConfig config = new WXConfig();
+
+        WXPay wxpay = new WXPay(config);
+
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("body", "腾讯充值中心-QQ会员充值");
+        data.put("out_trade_no", "2016090910595900000014");
+        data.put("device_info", "");
+        data.put("fee_type", "CNY");
+        data.put("total_fee", "1");
+        data.put("spbill_create_ip", "123.12.12.123");
+        data.put("notify_url", "http://www.example.com/wxpay/notify");
+        data.put("trade_type", "APP");  // 此处指定为扫码支付
+        data.put("product_id", "12");
+
+        try {
+            Map<String, String> resp = wxpay.unifiedOrder(data);
+            System.out.println(resp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping(value = "/wxpay", method = RequestMethod.GET)
+    public String wxpay(Long goodid,
+                        @CookieValue(value = "jsessionId", defaultValue = "nocookie") String jsessionId,
+                        HttpServletRequest request) throws IOException {
+        try {
+            String spbill_create_ip = request.getRemoteAddr();
+            Map respon = payService.createOrderAndWXpay(jsessionId, goodid,spbill_create_ip);
+
+            return "redirect:fanyupays://data="+ Base64.getEncoder().encodeToString(JSON.toJSONString(respon).getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultJson(ResultCode.FAILE_CODE, "", e.getMessage(), "").toString();
+        }
+
+    }
+
+    @RequestMapping(value = "/wxpay_notify", method = RequestMethod.POST)
+    @ResponseBody
+    public void wxpay_notify(HttpServletRequest request, HttpServletResponse response) throws Exception {
+//        request.get
+        BufferedReader reader = null;
+
+        reader = request.getReader();
+        String line = "";
+        StringBuffer inputString = new StringBuffer();
+
+        while ((line = reader.readLine()) != null) {
+            inputString.append(line);
+        }
+        request.getReader().close();
+        String notifyData = inputString.toString();
+
+        WXConfig config = new WXConfig();
+        WXPay wxpay = new WXPay(config);
+
+        Map<String, String> notifyMap = WXPayUtil.xmlToMap(notifyData);  // 转换成map
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 if (wxpay.isPayResultNotifySignatureValid(notifyMap)) {
+            String total_fee = notifyMap.get("total_fee");
+            BigDecimal paymoney=new BigDecimal(total_fee).divide(new BigDecimal("100"));
+            String transaction_id = notifyMap.get("transaction_id");
+            String out_trade_no = notifyMap.get("out_trade_no");
+            // 签名正确
+            // 进行处理。
+            // 注意特殊情况：订单已经退款，但收到了支付结果成功的通知，不应把商户侧订单状态从退款改成支付成功
+            payService.updateOrderStatus(out_trade_no, transaction_id,paymoney,"wxpay");
+        } else {
+            // 签名错误，如果数据里没有sign字段，也认为是签名错误
+        }
+    }
 }

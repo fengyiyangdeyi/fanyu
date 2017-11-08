@@ -8,11 +8,14 @@ import cn.com.fanyu.utils.BusinessException;
 import cn.com.fanyu.utils.ResultCode;
 import cn.com.fanyu.utils.ResultJson;
 import com.alibaba.fastjson.JSON;
+import com.aliyuncs.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.Map;
@@ -194,7 +197,7 @@ public class UserController {
         try {
             String vcode = (String) session.getAttribute(phone);
             if(!code.equals(vcode)){
-                throw new BusinessException("验证码不误！");
+                throw new BusinessException("验证码有误！");
             }
             Map map=userService.register(phone,pwd);
             return new ResultJson(ResultCode.SUCCESS_CODE, "成功", "", JSON.toJSONString(map)).toString();
@@ -222,10 +225,14 @@ public class UserController {
 
     @RequestMapping(value = "/phoneLogin", method = RequestMethod.POST,produces = "application/json; charset=utf-8")
     @ResponseBody
-    public String phoneLogin(String phone,String pwd) {
+    public String phoneLogin(String phone, String pwd, HttpServletResponse response) {
         try {
-            userService.phoneLogin(phone,pwd);
-            return new ResultJson(ResultCode.SUCCESS_CODE, "成功", "", "").toString();
+            Map map=userService.phoneLogin(phone,pwd);
+            String jsessionId=(String) map.get("uuid");
+            response.addHeader("jsessionId",jsessionId);
+            Cookie cookie=new Cookie("jsessionId",jsessionId);
+            response.addCookie(cookie);
+            return new ResultJson(ResultCode.SUCCESS_CODE, "成功", "", JSON.toJSONString(map)).toString();
         } catch (Exception e) {
             e.printStackTrace();
             return new ResultJson(ResultCode.FAILE_CODE, "", e.getMessage(), "").toString();

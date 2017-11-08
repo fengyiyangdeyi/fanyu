@@ -22,7 +22,7 @@ import java.util.Random;
 public class MessageController {
 
 
-    @RequestMapping(value = "/sent", method = RequestMethod.POST)
+    @RequestMapping(value = "/sent", method = RequestMethod.POST,produces = "application/json; charset=utf-8")
     @ResponseBody
     public String sent(HttpSession session,String phone)  {
         try {

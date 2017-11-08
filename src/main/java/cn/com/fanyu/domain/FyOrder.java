@@ -35,6 +35,16 @@ public class FyOrder {
     private BigDecimal givingDiamondNum;
     @Column
     private Long goodsId;
+    @Column
+    private String payType;
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
 
     public Long getGoodsId() {
         return goodsId;

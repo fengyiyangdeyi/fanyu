@@ -152,9 +152,20 @@ lp                // }
             // alert(getck('jsessionId'));
             // return;
 
-
+            function getCookie(name) {
+                var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
+                if(arr != null) return unescape(arr[2]); return null;
+            }
             if(weixinPay==0){
-                alert("正在开发中，敬请期待！");
+                window.location.href = "/pay/wxpay?goodid="+payid;
+                // $.ajax({
+                //     type: "get",
+                //     url:"/pay/wxpay?goodid="+payid,
+                //     async:true,
+                //     success:function (res) {
+                //        alert(getCookie());
+                //     }
+                // })
             }else {
                 window.location.href = "/pay/alipay?goodid="+payid;
             }

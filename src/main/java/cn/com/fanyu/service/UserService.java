@@ -159,6 +159,7 @@ public class UserService {
         FyUser dbuser = fyUserRepository.getIMUserByUserName(user.getUsername());
         if (dbuser == null) {
             user.setPassword(MD5Tools.MD5(pwd));
+            user.setNickname("玩家_"+phone.substring(7,11));
             dbuser=fyUserRepository.saveAndFlush(user);
             RegisterUsers list = new RegisterUsers();
             User u=new User();
@@ -227,7 +228,7 @@ public class UserService {
         fyUserRepository.saveAndFlush(user);
     }
 
-    public void phoneLogin(String phone, String pwd) {
+    public Map phoneLogin(String phone, String pwd) {
         FyUser user = fyUserRepository.getIMUserByUserName(phone);
         if(user==null){
             throw new BusinessException("用户未注册");
@@ -236,5 +237,42 @@ public class UserService {
         if(!user.getPassword().equals(md5)){
             throw new BusinessException("密码有误！");
         }
+
+        FyUser byUuid;
+        String uuid;
+        do {
+            uuid = IdGen.uuid();
+            byUuid = fyUserRepository.findByUuid(uuid);
+        }while (byUuid!=null);
+        user.setUuid(uuid);
+        fyUserRepository.saveAndFlush(user);
+
+        Map map =new HashMap();
+        map.put("id",user.getId());
+        map.put("username",user.getUsername());
+        map.put("imgUrl",user.getImgUrl());
+        map.put("nickname",user.getNickname());
+        map.put("diamondNum",user.getDiamondNum());
+        map.put("uuid",user.getUuid());
+
+        //支付
+        FyGlobalValue payStatus = fyGlobalValueRepository.findByStatusAndGlobalKey(1, "payStatus");
+        map.put("payStatus",payStatus.getGlobalValue());
+        //转盘
+        FyGlobalValue rotaryTable = fyGlobalValueRepository.findByStatusAndGlobalKey(1, "rotaryTable");
+        if(rotaryTable!=null){
+            map.put("rotaryTable",rotaryTable.getGlobalValue());
+        }else {
+            map.put("rotaryTable","");
+        }
+
+        List<FyGroup> fyGroups = fyGroupRepository.ownerChatGroup(user.getUsername());
+        if(fyGroups.size()>0){
+            map.put("hasCreateGroup",1);
+        }else {
+            map.put("hasCreateGroup",0);
+        }
+
+        return map;
     }
 }
