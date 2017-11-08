@@ -151,16 +151,19 @@ public class UserService {
         return map;
     }
 
+    @Transactional
     public Map register(String phone, String pwd) {
         Map map = new HashMap<>();
-        FyUser user=new FyUser();
-        user.setUsername(phone);
-        user.setPhone(phone);
-        FyUser dbuser = fyUserRepository.getIMUserByUserName(user.getUsername());
+
+        FyUser dbuser = fyUserRepository.findByPhone(phone);
         if (dbuser == null) {
+            FyUser user=new FyUser();
+            user.setPhone(phone);
             user.setPassword(MD5Tools.MD5(pwd));
             user.setNickname("玩家_"+phone.substring(7,11));
+            user.setImgUrl("http://www.szfanyukeji.com:8085/wximg/default_avatar.png");
             dbuser=fyUserRepository.saveAndFlush(user);
+            dbuser.setUsername(dbuser.getId()+"");
             RegisterUsers list = new RegisterUsers();
             User u=new User();
             u.setUsername(user.getUsername());
@@ -198,7 +201,8 @@ public class UserService {
             map.put("rotaryTable","");
         }
 
-        List<FyGroup> fyGroups = fyGroupRepository.ownerChatGroup(user.getUsername());
+        List<FyGroup> fyGroups = fyGroupRepository.ownerChatGroup(dbuser.getUsername());
+
         if(fyGroups.size()>0){
             map.put("hasCreateGroup",1);
         }else {
@@ -220,7 +224,7 @@ public class UserService {
     }
 
     public void forgetpwd(String phone, String newpwd) {
-        FyUser user = fyUserRepository.getIMUserByUserName(phone);
+        FyUser user = fyUserRepository.findByPhone(phone);
         if(user==null){
             throw new BusinessException("用户不存在！");
         }
@@ -229,7 +233,7 @@ public class UserService {
     }
 
     public Map phoneLogin(String phone, String pwd) {
-        FyUser user = fyUserRepository.getIMUserByUserName(phone);
+        FyUser user = fyUserRepository.findByPhone(phone);
         if(user==null){
             throw new BusinessException("用户未注册");
         }
@@ -267,6 +271,68 @@ public class UserService {
         }
 
         List<FyGroup> fyGroups = fyGroupRepository.ownerChatGroup(user.getUsername());
+        if(fyGroups.size()>0){
+            map.put("hasCreateGroup",1);
+        }else {
+            map.put("hasCreateGroup",0);
+        }
+
+        return map;
+    }
+
+    @Transactional
+    public Map wxregister(String phone, String pwd, String wxid,String imgUrl,String nickname) {
+        Map map = new HashMap<>();
+        FyUser dbuser = fyUserRepository.findByPhone(phone);
+        if (dbuser == null) {
+            FyUser user=new FyUser();
+            user.setPhone(phone);
+            user.setPassword(MD5Tools.MD5(wxid));
+            user.setNickname(nickname);
+            user.setImgUrl(imgUrl);
+            user.setWxid(wxid);
+            dbuser=fyUserRepository.saveAndFlush(user);
+            dbuser.setUsername(dbuser.getId()+"");
+            RegisterUsers list = new RegisterUsers();
+            User u=new User();
+            u.setUsername(user.getId()+"");
+            u.setPassword("fanyu");
+            list.add(u);
+            eiu.createNewIMUserSingle(list);
+        }else {
+            dbuser.setImgUrl(imgUrl);
+            dbuser.setNickname(nickname);
+            dbuser.setWxid(wxid);
+        }
+        FyUser byUuid;
+        String uuid;
+        do {
+            uuid = IdGen.uuid();
+            byUuid = fyUserRepository.findByUuid(uuid);
+        }while (byUuid!=null);
+        dbuser.setUuid(uuid);
+        fyUserRepository.saveAndFlush(dbuser);
+
+
+        map.put("id",dbuser.getId());
+        map.put("username",dbuser.getUsername());
+        map.put("imgUrl",dbuser.getImgUrl());
+        map.put("nickname",dbuser.getNickname());
+        map.put("diamondNum",dbuser.getDiamondNum());
+        map.put("uuid",dbuser.getUuid());
+
+        //支付
+        FyGlobalValue payStatus = fyGlobalValueRepository.findByStatusAndGlobalKey(1, "payStatus");
+        map.put("payStatus",payStatus.getGlobalValue());
+        //转盘
+        FyGlobalValue rotaryTable = fyGlobalValueRepository.findByStatusAndGlobalKey(1, "rotaryTable");
+        if(rotaryTable!=null){
+            map.put("rotaryTable",rotaryTable.getGlobalValue());
+        }else {
+            map.put("rotaryTable","");
+        }
+
+        List<FyGroup> fyGroups = fyGroupRepository.ownerChatGroup(phone);
         if(fyGroups.size()>0){
             map.put("hasCreateGroup",1);
         }else {

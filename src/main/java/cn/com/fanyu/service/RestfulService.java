@@ -211,18 +211,21 @@ public class RestfulService {
     public Map wxLogin(FyUser user) throws BusinessException {
         Map map = new HashMap<>();
         user.setUsername(user.getUsername().toLowerCase());
-        FyUser dbuser = fyUserRepository.getIMUserByUserName(user.getUsername());
+        FyUser dbuser = fyUserRepository.findByWxid(user.getUsername());
         if (dbuser == null) {
-            String password = user.getPassword();
-            user.setPassword(MD5Tools.MD5(password));
-            user.setWxid(user.getUsername());
-            dbuser=fyUserRepository.saveAndFlush(user);
-            RegisterUsers list = new RegisterUsers();
-            User u=new User();
-            u.setUsername(user.getUsername());
-            u.setPassword(password);
-            list.add(u);
-            eiu.createNewIMUserSingle(list);
+//            String password = user.getPassword();
+//            user.setPassword(MD5Tools.MD5(password));
+//            user.setWxid(user.getUsername());
+//            dbuser=fyUserRepository.saveAndFlush(user);
+//            RegisterUsers list = new RegisterUsers();
+//            User u=new User();
+//            u.setUsername(user.getUsername());
+//            u.setPassword(password);
+//            list.add(u);
+//            eiu.createNewIMUserSingle(list);
+            map.put("has","0");
+            return map;
+
         }
         FyUser byUuid;
         String uuid;
@@ -240,6 +243,7 @@ public class RestfulService {
         map.put("nickname",dbuser.getNickname());
         map.put("diamondNum",dbuser.getDiamondNum());
         map.put("uuid",dbuser.getUuid());
+        map.put("has","1");
 
         //支付
         FyGlobalValue payStatus = fyGlobalValueRepository.findByStatusAndGlobalKey(1, "payStatus");

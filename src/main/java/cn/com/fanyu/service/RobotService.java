@@ -101,6 +101,30 @@ public class RobotService {
         return v;
     }
 
+    public UserVo saomalogin(String jsessionId, String groupid) throws Exception {
+        FyUser dbuser = fyUserRepository.findByUuid(jsessionId);
+        if (dbuser == null) {
+            throw new Exception("用户不存在！");
+        }
+        if (!StringUtil.isNullOrEmpty(groupid)) {
+            FyGroup chatGroup = fyGroupRepository.getChatGroup(groupid);
+            if (chatGroup == null) {
+                throw new Exception("群id有误！");
+            }
+        } else {
+            if (!"7".equals(dbuser.getPermissions())) {
+                throw new Exception("groupid不能为空！");
+            }
+        }
+        UserVo v = new UserVo();
+        v.setUsername(dbuser.getUsername());
+        v.setGroupid(groupid);
+        v.setImgUrl(dbuser.getImgUrl());
+        v.setPermissions(dbuser.getPermissions());
+        v.setNickname(dbuser.getNickname());
+        return v;
+    }
+
     public String getMemberByGroubId(String groupid, Integer page, Integer limit,String keyword) {
         Integer pageIndex = (page - 1) * limit;
         Integer pageSize = limit;
@@ -494,6 +518,9 @@ public class RobotService {
             BigDecimal xiazhuDate = new BigDecimal(0);
             if(regularType.equals("xiazhuRegular")){
                 xiazhuDate = getXiazhuDate(rule, content);
+                if(niuNiu.getMaxBet().compareTo(xiazhuDate)<0){
+                    throw new BusinessException("最大下注金额"+niuNiu.getMaxBet());
+                }
             }else if(regularType.equals("suohaRegular")){
                 xiazhuDate = getSuohaDate(rule, content);
                 if (niuNiu.getMinsuoha()!=null&&niuNiu.getMinsuoha().compareTo(xiazhuDate)>0) {
@@ -505,9 +532,6 @@ public class RobotService {
             }
             if (niuNiu.getMinBet()!=null&&niuNiu.getMinBet().compareTo(xiazhuDate)>0) {
                 throw new BusinessException("最低下注金额"+niuNiu.getMinBet());
-            }
-            if(niuNiu.getMaxBet().compareTo(xiazhuDate)<0){
-                throw new BusinessException("最大下注金额"+niuNiu.getMaxBet());
             }
             if (xiazhuDate.compareTo(BigDecimal.ZERO) <= 0) {
                 throw new BusinessException( "下注金额有问题");

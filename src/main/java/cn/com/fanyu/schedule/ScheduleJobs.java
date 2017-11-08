@@ -77,7 +77,7 @@ public class ScheduleJobs {
 
     public void task() {
         //查找任务
-        List<FyTask> list = fyTaskRepository.findByStatus(3);
+        List<FyTask> list = fyTaskRepository.findByStatus(0);
         for (FyTask task : list) {
             try {
                 taskService.calculate(task);

@@ -13,12 +13,15 @@ public class WXConfig implements WXPayConfig {
     private byte[] certData;
 
     public WXConfig() throws Exception {
-        URL url = getClass().getClassLoader().getResource("apiclient_cert.p12");
-        File file = new File(url.getFile());
-        InputStream certStream = new FileInputStream(file);
-        this.certData = new byte[(int) file.length()];
-        certStream.read(this.certData);
-        certStream.close();
+////        URL url = getClass().getClassLoader().getResource("apiclient_cert.p12");
+////        System.out.println("url"+url.getFile());
+//        URL url1 = getClass().getClassLoader().getResource("");
+//        File file = new File(url1.getFile()+"apiclient_cert.p12");
+////        System.out.println("url2111"+url1.getFile()+"apiclient_cert.p12");
+//        InputStream certStream = new FileInputStream(file);
+//        this.certData = new byte[(int) file.length()];
+//        certStream.read(this.certData);
+//        certStream.close();
     }
 
     public String getAppID() {

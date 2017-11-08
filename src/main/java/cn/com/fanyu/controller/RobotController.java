@@ -9,10 +9,7 @@ import cn.com.fanyu.utils.*;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -464,9 +461,9 @@ public class RobotController {
 
     @RequestMapping(value = "/QrCodeLogin", method = RequestMethod.POST,produces = "application/json; charset=utf-8")
     @ResponseBody
-    public String QrCodeLogin(FyUser user,String groupid,String uuid) {
+    public String QrCodeLogin(String groupid, String uuid, @CookieValue(value = "jsessionId", defaultValue = "nocookie") String jsessionId) {
         try {
-            UserVo dbuser=robotService.login(user,groupid);
+            UserVo dbuser=robotService.saomalogin(jsessionId,groupid);
             //将登陆信息存入map
             UserVo userVo = LoginUserVo.getLoginUserMap().get(uuid);
             if (userVo == null) {

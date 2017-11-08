@@ -117,10 +117,13 @@ public class PayService {
     public void updateOrderStatus(String code, String trade_no, BigDecimal paymoney,String payType) {
         FyOrder order = fyOrderRepository.findByCode(code);
         if (order == null) {
-            throw new BusinessException("找不到订单" + code);
+//            throw new BusinessException("找不到订单" + code);
+            return;
         }
         if (order.getStatus().intValue() != 0) {
-            throw new BusinessException("订单状态必须为未支付" + code);
+//            throw new BusinessException("订单状态必须为未支付" + code);
+            return;
+
         }
         order.setTrade_no(trade_no);
         order.setPaymoney(paymoney);

@@ -11,4 +11,8 @@ public interface FyUserRepository extends JpaRepository<FyUser, Long> ,JpaSpecif
     FyUser getIMUserByUserName(@Param("username") String username);
 
     FyUser findByUuid(String jsessionId);
+
+    FyUser findByWxid(String wxid);
+
+    FyUser findByPhone(String phone);
 }
