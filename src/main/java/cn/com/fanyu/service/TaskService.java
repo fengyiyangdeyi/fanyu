@@ -61,7 +61,7 @@ public class TaskService {
                 bet.setStatus(1);
                 fyMesBetRepository.saveAndFlush(bet);
                 BigDecimal[] integral = culcalateScore(bet, new BigDecimal(0), new BigDecimal(0));
-                sbsxianjia.append("[" + bet.getNickname() + "] 押:" + bet.getData().intValue()+"上局:" + integral[0] + " 本局:" + integral[1]);
+                sbsxianjia.append("[" + bet.getNickname() + "] 押:" + bet.getData().intValue() + "上局:" + integral[0] + " 本局:" + integral[1]);
                 sbsxianjiaFlag = true;
                 sbbanker.append("\n");
             }
@@ -81,7 +81,8 @@ public class TaskService {
                     //未抢到包的用户
                     if (bet.getPoint().doubleValue() == 0) {
                         BigDecimal[] integral = culcalateScore(bet, new BigDecimal(0), new BigDecimal(0));
-                        sbsxianjia.append("[" + bet.getNickname() + "] 押:" + bet.getData().intValue()+"上局:" + integral[0] + " 本局:" + integral[1]);
+                        String shtabs = bet.getRegularType().intValue() == 1 ? "梭哈" : "";
+                        sbsxianjia.append("[" + bet.getNickname() + "] 押:" + shtabs + bet.getData().intValue() + "上局:" + integral[0] + " 本局:" + integral[1]);
                         sbnoDiamond.append(bet.getNickname() + ":" + bet.getData());
                         sbnoDiamond.append("\n");
                     } else if (bet.getData().doubleValue() == 0 && !bet.getUsername().equals(bankerUsername)) {
@@ -92,7 +93,8 @@ public class TaskService {
                         StringBuffer tempsb = new StringBuffer();
                         //计算分数加减
                         tempsb.append("[" + bet.getNickname() + "]" + "\n");
-                        tempsb.append("抢:" + bet.getPoint() + " 押:" + data.intValue() + "(" + nndt.getName() + ")");
+                        String shtabs = bet.getRegularType().intValue() == 1 ? "梭哈" : "";
+                        tempsb.append("抢:" + bet.getPoint() + " 押:" + shtabs + data.intValue() + "(" + nndt.getName() + ")");
                         FyScore score = fyScoreRepository.findByGroupidAndUsernameAndStatus(bet.getGroupid(), bet.getUsername(), 1);
                         BigDecimal remainingIntegral = score.getIntegral().add(bet.getData());
 
@@ -129,7 +131,7 @@ public class TaskService {
                             boolean isdo = false;//是否找到了用户自定义的同点配置
                             for (SamePointDetail dt : samePointDetail) {
                                 if (dt.getPoint().intValue() == nndt.getSelectId()) {
-                                    isdo=true;
+                                    isdo = true;
                                     switch (dt.getOption().intValue()) {
                                         case 1:
                                             //庄家赢
@@ -209,7 +211,7 @@ public class TaskService {
             }
             //庄家总账
             sbbanker.append("\n");
-            sbbanker.append("吃" + zying + "家,赔" + zshu + "家,跑"+pao + "家\n");
+            sbbanker.append("吃" + zying + "家,赔" + zshu + "家,跑" + pao + "家\n");
             //人头水费
             BigDecimal rtcvalue = niuNiu.getRtcvalue().setScale(0, BigDecimal.ROUND_HALF_UP);
             ;
