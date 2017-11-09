@@ -35,9 +35,8 @@ public class TemplatesService {
         String rulejson = rule.getRule();
         NiuNiu niuNiu = JSON.parseObject(rulejson, NiuNiu.class);
         FyScore banker = fyScoreRepository.findByGroupidAndUsernameAndStatus(groupid, templates.getBanker(), 1);
-        if(niuNiu.getMinBankerScore().compareTo(banker.getZintegral())>0){
+        if(banker!=null&&templates.getMinBankerScore().compareTo(banker.getZintegral())>0){
             throw new BusinessException("庄家庄分不足！");
-
         }
         niuNiu.setBanker(templates.getBanker());
         niuNiu.setMinBankerScore(templates.getMinBankerScore());
@@ -313,12 +312,10 @@ public class TemplatesService {
 
     public Map getRegularByGroupid(String groupid) {
         FyRule rule = fyRuleRepository.getRule(groupid);
-        if(rule==null){
-            return new HashMap();
-        }
-        String rulejson = rule.getRule();
-        NiuNiu niuNiu = JSON.parseObject(rulejson, NiuNiu.class);
-        Map map = getRegular(niuNiu);
+        Map map=new HashMap();
+        map.put("suohaRegular","^梭哈\\d+$");
+        map.put("shangfenRegular","^上\\d+$");
+        map.put("xiazhuRegular","^\\d+$");
         return map;
     }
 }

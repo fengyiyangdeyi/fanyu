@@ -126,12 +126,13 @@ public class TaskService {
                         } else {
                             //点数相等
                             List<SamePointDetail> samePointDetail = niuNiu.getSamePointDetail();
-                            boolean isdo = false;
+                            boolean isdo = false;//是否找到了用户自定义的同点配置
                             for (SamePointDetail dt : samePointDetail) {
                                 if (dt.getPoint().intValue() == nndt.getSelectId()) {
                                     isdo=true;
                                     switch (dt.getOption().intValue()) {
                                         case 1:
+                                            //庄家赢
                                             if (ztimeout) {
                                                 PaoLu paoLu = new PaoLu(sbpxianjia, tempstr, pao, bet, nndt, tempsb, xtimeout).invoke();
                                                 sbpxianjiaFlag = paoLu.isSbpxianjiaFlag();
@@ -143,10 +144,12 @@ public class TaskService {
                                             }
                                             break;
                                         case 2:
+                                            //跑
                                             PaoLu paoLu1 = new PaoLu(sbpxianjia, tempstr, pao, bet, nndt, tempsb, xtimeout).invoke();
                                             sbpxianjiaFlag = paoLu1.isSbpxianjiaFlag();
                                             break;
                                         case 3:
+                                            //比金额(同平)
                                             if (bankerBet.getPoint().compareTo(bet.getPoint()) > 0) {
                                                 ZhuangYing zhuangYing = new ZhuangYing(sbsxianjia, bankernndt, tempstr, bankerAccount, zying, bet, data, tempsb, remainingIntegral).invoke();
                                                 bankerAccount = zhuangYing.getBankerAccount();
@@ -166,6 +169,7 @@ public class TaskService {
                                             }
                                             break;
                                         case 4:
+                                            //比金额(庄赢)
                                             if (bankerBet.getPoint().compareTo(bet.getPoint()) >= 0) {
                                                 ZhuangYing zhuangYing = new ZhuangYing(sbsxianjia, bankernndt, tempstr, bankerAccount, zying, bet, data, tempsb, remainingIntegral).invoke();
                                                 bankerAccount = zhuangYing.getBankerAccount();
@@ -182,6 +186,7 @@ public class TaskService {
                                             }
                                             break;
                                         case 5:
+                                            //庄输
                                             ZhuangYing zhuangYing = new ZhuangYing(sbsxianjia, bankernndt, tempstr, bankerAccount, zying, bet, data, tempsb, remainingIntegral).invoke();
                                             bankerAccount = zhuangYing.getBankerAccount();
                                             zying = zhuangYing.getZying();

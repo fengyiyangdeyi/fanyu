@@ -444,6 +444,9 @@ public class RobotService {
 
     private BigDecimal createzScoreDetail(FyScore fi, BigDecimal value,String remark) {
         FyRule rule = fyRuleRepository.getRule(fi.getGroupid());
+        if(rule==null){
+            throw new BusinessException("上分失败，请先配置游戏玩法！");
+        }
         String rulejson = rule.getRule();
         NiuNiu niuNiu = JSON.parseObject(rulejson, NiuNiu.class);
         BigDecimal szcvalue = niuNiu.getSzcvalue();
