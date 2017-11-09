@@ -355,8 +355,8 @@ public class RobotService {
         rule.setGroupId(groupid);
         FyRule fixRule = fyRuleRepository.findByName(rule.getName() + "固定模版");
         rule.setRule(fixRule.getRule());
-        NiuNiu niuNiu = JSON.parseObject(fixRule.getRule(), NiuNiu.class);
-        templatesService.setRegularMes(niuNiu,groupid);
+//        NiuNiu niuNiu = JSON.parseObject(fixRule.getRule(), NiuNiu.class);
+//        templatesService.setRegularMes(niuNiu,groupid);
         fyRuleRepository.saveAndFlush(rule);
     }
 
@@ -513,6 +513,10 @@ public class RobotService {
             fyMesScoreRepository.saveAndFlush(s);
         } else if (regularType.equals("xiazhuRegular")||regularType.equals("suohaRegular")) {
             FyRule rule = fyRuleRepository.getRule(groupid);
+            if(rule==null){
+                //还没建立模版
+                return;
+            }
             String rulejson = rule.getRule();
             NiuNiu niuNiu = JSON.parseObject(rulejson, NiuNiu.class);
             if (rule.getXiazhuFlag().intValue() == 0) {
